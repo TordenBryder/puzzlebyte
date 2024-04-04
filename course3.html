@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Lua Programming Through Exciting Games</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        .content-container {
+            padding-top: 20px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 300px; /* Fixed height for demo purposes, adjust as needed */
+            background-color: #dee2e6; /* Placeholder color */
+        }
+
+        .text-section {
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="index.html">Puzzle Byte</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="modules.html">Modules</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="profile.html">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="logout.html">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+    <div class="content-container container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="main-image"></div>
+            </div>
+            <div class="col-12 col-md-6 text-section">
+                <h2>Essential Knowledge for Lua Extensions and Libraries</h2>
+                <p>Welcome to our course on Lua extensions and libraries! Before diving into the quiz questions, let's review some critical concepts and information you should know:
+
+                    JSON Data Handling: Understand that the 'lua-cjson' library provides support for handling JSON data in Lua.
+                    
+                    Implementing Lua Modules in C/C++: Learn about 'LuaBind,' a commonly used Lua extension for implementing Lua modules in C or C++.
+                    
+                    LuaSocket Library: Recognize the purpose of the 'LuaSocket' library, which is commonly used for implementing networking protocols in Lua.
+                    
+                    Database Interaction: Explore the 'lua-sqlite3' library, often used for working with databases in Lua.
+                    
+                    File System Manipulation: Familiarize yourself with the 'LuaFileSystem' library, which provides utilities for manipulating file paths and directories.
+                    
+                    Random Number Generation: Know that the 'math.randomseed()' function in Lua initializes the random number generator with a given seed.
+                    
+                    String Manipulation: Understand the purpose of the 'string.gsub()' function, which stands for "string global substitution by pattern and replacement."
+                    
+                    Global Environment: Learn about the '_G' environment in Lua, which contains all global variables and functions.
+                    
+                    File Input/Output: Understand that 'io.lines()' returns an iterator function that reads lines from a file, closing the file automatically when the iterator is exhausted.
+                    
+                    Inequality Operator: Recognize that the '!=' operator in Lua denotes "not equal" inequality.
+                    
+                    Bitwise Operations: Know that the '⊕' operator is used for bitwise exclusive OR in Lua.
+                    
+                    Table Manipulation: Learn about 'table.clone()', which is used to create a shallow copy of a table in Lua.
+                    
+                    Timing Functions: Understand the purpose of 'os.clock()', which returns the CPU time used by the program.
+                    
+                    Maximum Value in a Table: Recognize that 'math.max()' is used to find the maximum value in a table in Lua.
+                    
+                    Coroutine Operations: Explore 'coroutine.yield()', which suspends the execution of a coroutine in Lua.
+                    
+                    By mastering these fundamental concepts and library functionalities, you'll be well-prepared to tackle the quiz questions and effectively utilize Lua extensions and libraries in your projects. Good luck!</p>
+                <a href="#" class="btn btn-primary">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const email = sessionStorage.getItem('email');
+            if (email) {
+                fetch('http://localhost:3000/add-points', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email, pointsToAdd: 10 }) // Update the points as needed
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to add points');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        console.log(`Points added: ${data.pointsAdded}`);
+                    }
+                })
+                .catch(error => console.error('Error adding points:', error));
+            } else {
+                console.error('No email found in session storage');
+            }
+        });
+    </script>
+</body>
+</html>

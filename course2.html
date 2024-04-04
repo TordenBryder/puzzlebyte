@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Lua Programming Through Exciting Games</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        .content-container {
+            padding-top: 20px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 300px; /* Fixed height for demo purposes, adjust as needed */
+            background-color: #dee2e6; /* Placeholder color */
+        }
+
+        .text-section {
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="index.html">Puzzle Byte</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="home.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="modules.html">Modules</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="profile.html">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="logout.html">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+    <div class="content-container container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="main-image"></div>
+            </div>
+            <div class="col-12 col-md-6 text-section">
+                <h2>Essential Knowledge for Lua Applications and Integration</h2>
+                <p>Welcome to our course on Lua applications and integration! Before delving into the quiz questions, let's review some crucial concepts and information you should know:
+
+                    Dynamic Variable Assignment: Understand that Lua allows for dynamic assignment of variables.
+                    
+                    Metatable Feature: Learn about Lua's "metatable" feature, primarily used to allow custom behavior for tables.
+                    
+                    File Execution and Pattern Matching: Familiarize yourself with functions like 'dofile()' for executing Lua scripts and 'string.match()' for pattern matching on strings.
+                    
+                    Common Libraries: Explore widely used Lua libraries such as 'math' for mathematical operations and 'socket' for network communication.
+                    
+                    LuaJIT: Understand that LuaJIT is a Just-In-Time compiler for Lua, providing enhanced performance.
+                    
+                    Lua for Web Development: Learn about Lua frameworks like Lapis for building lightweight web applications.
+                    
+                    Embedded Systems Programming: Gain insight into Lua's role in embedded systems with libraries like 'lua-rtos' for real-time operating systems development.
+                    
+                    IoT Applications: Recognize Lua's significance in IoT with platforms like NodeMCU, which provides Lua-based firmware for devices like the ESP8266 WiFi module.
+                    
+                    GPIO and ADC Modules: Understand the usage of Lua modules like 'gpio' for controlling hardware pins and 'adc' for analog-to-digital conversion on microcontrollers.
+                    
+                    MicroLua: Explore MicroLua, an optimized Lua interpreter designed for resource-constrained embedded devices, offering enhanced performance.
+                    
+                    By mastering these fundamental concepts and areas of application, you'll be better equipped to tackle the quiz questions and apply Lua effectively in various domains. Good luck!</p>
+                <a href="#" class="btn btn-primary">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const email = sessionStorage.getItem('email');
+            if (email) {
+                fetch('http://localhost:3000/add-points', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email, pointsToAdd: 10 }) // Update the points as needed
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to add points');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        console.log(`Points added: ${data.pointsAdded}`);
+                    }
+                })
+                .catch(error => console.error('Error adding points:', error));
+            } else {
+                console.error('No email found in session storage');
+            }
+        });
+    </script>
+</body>
+</html>

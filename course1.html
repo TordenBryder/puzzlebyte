@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Lua Programming Through Exciting Games</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        .content-container {
+            padding-top: 20px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 300px; /* Fixed height for demo purposes, adjust as needed */
+            background-color: #dee2e6; /* Placeholder color */
+        }
+
+        .text-section {
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="index.html">Puzzle Byte</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="modules.html">Modules</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="profile.html">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="logout.html">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+    <div class="content-container container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="main-image"></div>
+            </div>
+            <div class="col-12 col-md-6 text-section">
+                <h2>Preparing for Lua Scripting Mastery</h2>
+                <p>Welcome to our Lua Scripting Mastery course! Before diving into the quiz questions, let's recap some essential concepts and knowledge areas you should be familiar with to excel in Lua scripting:
+                    
+                    Comments and Syntax: Understand the syntax for comments in Lua, which uses '--' to denote single-line comments.
+
+                    Function Definitions: Learn how to define functions in Lua using the 'function' keyword.
+                    
+                    Data Structures: Recognize the primary data structure in Lua, the table, used to store key-value pairs.
+                    
+                    String Operations: Familiarize yourself with string concatenation in Lua, achieved using the '..' operator.
+                    
+                    Looping Constructs: Know how to iterate over key-value pairs in a Lua table using the 'pairs()' function and exit loops prematurely using the 'break' keyword.
+                    
+                    Standard Library Functions: Explore essential Lua standard library functions such as 'io.open()' for file I/O operations and 'os.time()' for obtaining the current time.
+                    
+                    Operators: Master various Lua operators, including the exponentiation operator '^' and string concatenation operator '..'.
+                    
+                    Data Types: Differentiate between valid Lua types, ensuring familiarity with Lua's data types like string, table, and function.
+                    
+                    String and Number Conversion: Understand how to convert between string and number data types using functions like 'tonumber()'.
+                    
+                    Coroutines: Learn about Lua's coroutine feature and how to create coroutines using 'coroutine.create'.
+                    
+                    Metamethods: Grasp the concept of metamethods, including how to define them for indexing operations using '__index'.
+                    
+                    Working with Tables: Gain proficiency in working with Lua tables, including adding, removing elements, and formatting strings using 'table.remove' and 'string.format', respectively.
+                    
+                    By mastering these fundamental concepts and techniques, you'll be well-equipped to tackle the quiz questions and elevate your Lua scripting skills to new heights. Good luck</p>
+                <a href="#" class="btn btn-primary">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const email = sessionStorage.getItem('email');
+            if (email) {
+                fetch('http://localhost:3000/add-points', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email, pointsToAdd: 10 }) // Update the points as needed
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to add points');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        console.log(`Points added: ${data.pointsAdded}`);
+                    }
+                })
+                .catch(error => console.error('Error adding points:', error));
+            } else {
+                console.error('No email found in session storage');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Puzzle Byte</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="index.html">Puzzle Byte</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="modules.html">Modules</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="profile.html">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="logout.html">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+
+      <div class="text-right text-danger mt-3" id="timer" style="font-weight: bold; font-size: 1.2em; margin-right: 30px;"></div>
+    <div class="container mt-5">
+        <div class="modal fade" id="quizResultModal" tabindex="-1" role="dialog" aria-labelledby="quizResultModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="quizResultModalLabel">Quiz Result</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Quiz result message will be dynamically loaded here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz">
+            <!-- Quiz questions will be dynamically loaded here -->
+        </div>
+        <button id="submitQuiz" class="btn btn-primary">Submit Quiz</button>
+
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        let quizQuestions = []; // Global variable to store quiz questions
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const moduleId = urlParams.get('id');
+            if (!moduleId) {
+                console.error('Module ID not found in URL');
+                return;
+            }
+
+            let totalTime = 240; // Total time in seconds
+            const timerElement = document.getElementById('timer');
+            startTimer(totalTime, timerElement);
+
+         
+    fetch(`http://localhost:3000/quiz-questions/${moduleId}`)
+        .then(response => response.json())
+        .then(questions => {
+            quizQuestions = questions; // Assign fetched questions to the global variable
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = '';
+            questions.forEach((question, index) => {
+                if (question.type === 'mcq') {
+                    // Render multiple-choice question
+                    const questionElement = document.createElement('div');
+                    questionElement.className = 'card mb-3';
+                    questionElement.innerHTML = `
+                        <div class="card-body">
+                            <h5 class="card-title">${index + 1}. ${question.question}</h5>
+                            ${question.options.map((option, optionIndex) => `
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="question${index}" id="option${index}_${optionIndex}" value="${option}">
+                                    <label class="form-check-label" for="option${index}_${optionIndex}">
+                                        ${option}
+                                    </label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    quizContainer.appendChild(questionElement);
+                } else if (question.type === 'fill-in-the-blank') {
+                    // Render fill-in-the-blank question
+                    const questionElement = document.createElement('div');
+                    questionElement.className = 'card mb-3';
+                    questionElement.innerHTML = `
+                        <div class="card-body">
+                            <h5 class="card-title">${index + 1}. ${question.question}</h5>
+                            <input type="text" class="form-control" id="blank${index}" placeholder="Enter answer">
+                        </div>
+                    `;
+                    quizContainer.appendChild(questionElement);
+                }
+            });
+        })
+        .catch(error => console.error('Error loading quiz questions:', error));
+});
+
+
+        function startTimer(totalTime, timerElement) {
+            let timeLeft = totalTime;
+
+            const countdown = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    timerElement.textContent = 'Time\'s up!';
+                    document.getElementById('submitQuiz').disabled = true;
+                    // Show modal with appropriate message and score
+                    const quizResultModal = document.getElementById('quizResultModal');
+                    const modalBody = quizResultModal.querySelector('.modal-body');
+                    const score = calculateScore(); // Assuming you have a function to calculate the score
+                    modalBody.innerHTML = `Time's up! Your score is ${score}.`;
+                    $(quizResultModal).modal('show');
+                } else {
+                    timerElement.textContent = `${timeLeft} seconds remaining`;
+                    timeLeft--;
+                }
+            }, 1000); // Update timer every second
+        }
+
+        // Function to calculate the score
+        function calculateScore() {
+            return 5;
+        }
+
+        // Function to submit quiz
+        document.getElementById('submitQuiz').addEventListener('click', function() {
+            // Retrieve selected answers
+            const selectedAnswers = quizQuestions.map((question, index) => {
+    if (question.type === 'mcq') {
+        const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+        return selectedOption ? selectedOption.value : '';
+    } else if (question.type === 'fill-in-the-blank') {
+        const blankInput = document.getElementById(`blank${index}`);
+        return blankInput ? blankInput.value : '';
+    }
+});
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const moduleId = urlParams.get('id');
+            const email = sessionStorage.getItem('email');
+            // Send the selected answers to the server for grading
+            fetch(`http://localhost:3000/submit-quiz/${moduleId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, moduleId: moduleId, answers: selectedAnswers })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Quiz submitted:', data);
+                // Handle response from the server
+                if (data.success) {
+                    // Update user points in session storage
+                    handleQuizSubmissionResponse(data); // Call the function to handle the response
+                } else {
+                    alert('Failed to submit quiz. Please try again.');
+                }
+            })
+            .catch(error => console.error('Error submitting quiz:', error));
+        });
+
+   // Function to handle quiz submission response
+function handleQuizSubmissionResponse(data) {
+    if (data.success) {
+        // Update user points in session storage
+        const pointsEarned = data.points;
+        const currentPoints = sessionStorage.getItem('points') ? parseInt(sessionStorage.getItem('points')) : 0;
+        sessionStorage.setItem('points', currentPoints + pointsEarned);
+        
+        // Populate modal with quiz result
+        const quizResultModal = document.getElementById('quizResultModal');
+        const modalBody = quizResultModal.querySelector('.modal-body');
+        modalBody.innerHTML = `Quiz submitted successfully! You earned ${pointsEarned} points.`;
+        
+        // Show modal
+        $(quizResultModal).modal('show');
+
+        // Reset the form
+        const quizQuestions = document.querySelectorAll('[name^="question"]');
+        quizQuestions.forEach(question => {
+            question.checked = false;
+        });
+
+        // Close modal and redirect after modal is closed
+        $(quizResultModal).on('hidden.bs.modal', function () {
+            window.location.href = 'profile.html';
+        });
+    } else {
+        // Display error message
+        alert('Failed to submit quiz. Please try again.');
+    }
+}
+
+    </script>
+</body>
+</html>

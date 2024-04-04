@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Puzzle Byte</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="index.html">Puzzle Byte</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="modules.html">Modules</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="profile.html">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="logout.html">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="container mt-5">
+        <h2 class="mb-4">User Profile</h2>
+        <div id="profileInfo" class="card">
+            <div class="card-body">
+                <h5 class="card-title">Username:</h5>
+                <p class="card-text" id="username">Loading...</p>
+                <h5 class="card-title">Email:</h5>
+                <p class="card-text" id="email">Loading...</p>
+                <h5 class="card-title">Points:</h5>
+                <p class="card-text" id="points">Loading...</p>
+                <!-- Added Achievements Section -->
+                <h5 class="card-title">Achievements:</h5>
+                <ul class="list-group" id="achievements">Loading...</ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch username from sessionStorage
+    const email = sessionStorage.getItem('email');
+
+    // Fetch user profile info from backend
+    fetch(`http://localhost:3000/profile/${email}`) // Adjust endpoint as needed
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch user profile');
+            }
+            return response.json();
+        })
+        .then(profile => {
+            document.getElementById('username').textContent = profile.username;
+            document.getElementById('email').textContent = profile.email;
+            document.getElementById('points').textContent = profile.points;
+            // Fetch achievements
+            fetchAchievements(email);
+        })
+        .catch(error => console.error('Error fetching user profile:', error));
+
+
+
+        function fetchAchievements(email) {
+    fetch(`http://localhost:3000/achievements/${email}`) // Make sure this matches your server's endpoint
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch achievements');
+            }
+            return response.json();
+        })
+        .then(achievements => {
+            const achievementsList = document.getElementById('achievements');
+            achievementsList.innerHTML = ''; // Clear loading text
+            achievements.forEach(achievement => {
+                const li = document.createElement('li');
+                li.textContent = achievement;
+                li.classList.add('list-group-item');
+                achievementsList.appendChild(li);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching achievements:', error);
+            document.getElementById('achievements').textContent = 'Error loading achievements';
+        });
+}
+
+
+});
+
+    </script>
+</body>
+</html>
